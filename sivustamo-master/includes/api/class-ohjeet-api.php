@@ -249,23 +249,48 @@ class Ohjeet_API {
      */
     private static function get_allowed_kategoriat($site_id) {
         $allowed_kategoriat = get_post_meta($site_id, '_sivusto_kategoriat', true) ?: [];
+        $allowed_ohjeet = get_post_meta($site_id, '_sivusto_ohjeet', true) ?: [];
 
-        $args = [
-            'taxonomy' => 'sivustamo_kategoria',
-            'hide_empty' => false,
-            'orderby' => 'meta_value_num',
-            'meta_key' => '_kategoria_order',
-            'order' => 'ASC',
-        ];
+        // Jos sivustolle on määritelty yksittäisiä ohjeita, hae niiden kategoriat
+        if (!empty($allowed_ohjeet)) {
+            $kategoria_ids = [];
+            foreach ($allowed_ohjeet as $ohje_id) {
+                $terms = wp_get_post_terms($ohje_id, 'sivustamo_kategoria', ['fields' => 'ids']);
+                if (!is_wp_error($terms)) {
+                    $kategoria_ids = array_merge($kategoria_ids, $terms);
+                }
+            }
+            // Yhdistä mahdollisesti erikseen valittuihin kategorioihin
+            $allowed_kategoriat = array_unique(array_merge($allowed_kategoriat, $kategoria_ids));
+        }
 
-        if (!empty($allowed_kategoriat)) {
-            $args['include'] = $allowed_kategoriat;
+        // Jos ei ole mitään rajoituksia, palauta tyhjä lista
+        // (ei palauteta kaikkia kategorioita oletuksena)
+        if (empty($allowed_kategoriat) && empty($allowed_ohjeet)) {
+            // Palauta kaikki vain jos mitään ei ole rajoitettu
+            $args = [
+                'taxonomy' => 'sivustamo_kategoria',
+                'hide_empty' => true,
+                'orderby' => 'meta_value_num',
+                'meta_key' => '_kategoria_order',
+                'order' => 'ASC',
+            ];
+        } else {
+            // Suodata vain sallitut kategoriat
+            $args = [
+                'taxonomy' => 'sivustamo_kategoria',
+                'hide_empty' => false,
+                'orderby' => 'meta_value_num',
+                'meta_key' => '_kategoria_order',
+                'order' => 'ASC',
+                'include' => $allowed_kategoriat,
+            ];
         }
 
         $terms = get_terms($args);
         $kategoriat = [];
 
-        if (!is_wp_error($terms)) {
+        if (!is_wp_error($terms) && !empty($terms)) {
             foreach ($terms as $term) {
                 $kategoriat[] = [
                     'id' => $term->term_id,
