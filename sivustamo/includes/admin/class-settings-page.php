@@ -33,7 +33,7 @@ class Settings_Page {
             'edit.php?post_type=sivustamo_ohje',
             __('Sivustamo Asetukset', 'sivustamo'),
             __('Asetukset', 'sivustamo'),
-            'manage_sivustamo_settings',
+            'manage_options',
             'sivustamo-settings',
             [__CLASS__, 'render']
         );
@@ -237,7 +237,7 @@ class Settings_Page {
     public static function ajax_test_connection() {
         check_ajax_referer('sivustamo_nonce', 'nonce');
 
-        if (!current_user_can('manage_sivustamo_settings')) {
+        if (!current_user_can('manage_options')) {
             wp_send_json_error(['message' => __('Ei oikeuksia', 'sivustamo')]);
         }
 
@@ -268,7 +268,7 @@ class Settings_Page {
     public static function ajax_sync_now() {
         check_ajax_referer('sivustamo_nonce', 'nonce');
 
-        if (!current_user_can('manage_sivustamo_settings')) {
+        if (!current_user_can('manage_options')) {
             wp_send_json_error(['message' => __('Ei oikeuksia', 'sivustamo')]);
         }
 
@@ -293,7 +293,7 @@ class Settings_Page {
     public static function ajax_force_sync() {
         check_ajax_referer('sivustamo_nonce', 'nonce');
 
-        if (!current_user_can('edit_sivustamo_ohjeet')) {
+        if (!current_user_can('edit_posts')) {
             wp_send_json_error(['message' => __('Ei oikeuksia', 'sivustamo')]);
         }
 

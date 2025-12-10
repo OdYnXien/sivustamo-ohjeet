@@ -173,25 +173,13 @@ final class Sivustamo {
 
     /**
      * Varmista että oikeudet on asetettu
+     * Käytetään nyt WordPressin standardeja oikeuksia (edit_posts, manage_options)
+     * joten tätä ei enää tarvita, mutta pidetään tyhjänä yhteensopivuuden vuoksi
      */
     private function ensure_capabilities() {
-        $admin = get_role('administrator');
-        if ($admin && !$admin->has_cap('manage_sivustamo_settings')) {
-            $admin->add_cap('view_sivustamo_ohjeet');
-            $admin->add_cap('edit_sivustamo_ohjeet');
-            $admin->add_cap('manage_sivustamo_settings');
-
-            $editor = get_role('editor');
-            if ($editor) {
-                $editor->add_cap('view_sivustamo_ohjeet');
-                $editor->add_cap('edit_sivustamo_ohjeet');
-            }
-
-            $shop_manager = get_role('shop_manager');
-            if ($shop_manager) {
-                $shop_manager->add_cap('view_sivustamo_ohjeet');
-            }
-        }
+        // Käytetään nyt WordPressin standardeja capability_type => 'post'
+        // Administrator ja Editor voivat muokata, koska heillä on edit_posts
+        // Asetukset vaativat manage_options (vain Administrator)
     }
 
     /**
