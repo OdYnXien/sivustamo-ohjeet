@@ -3,7 +3,7 @@
  * Plugin Name: Sivustamo
  * Plugin URI: https://sivustamo.fi
  * Description: Sivustamon ohjeet ja oppaat - synkronoidut ohjeet keskitetystä hallinnasta
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Esko Junnila / Sivustamo Oy
  * Author URI: https://sivustamo.fi
  * License: GPL-2.0+
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin-vakiot
-define('SIVUSTAMO_VERSION', '1.0.0');
+define('SIVUSTAMO_VERSION', '1.0.1');
 define('SIVUSTAMO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SIVUSTAMO_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SIVUSTAMO_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -155,9 +155,6 @@ final class Sivustamo {
      * Alustus
      */
     public function init() {
-        // Varmista oikeudet (tarvitaan jos lisäosa oli jo aktiivinen ennen päivitystä)
-        $this->ensure_capabilities();
-
         // Rekisteröi post typet ja taxonomiat
         Post_Types\Ohje_CPT::register();
         Taxonomies\Kategoria_Tax::register();
@@ -169,17 +166,21 @@ final class Sivustamo {
 
         // Rewrite rules
         $this->add_rewrite_rules();
+
+        // Flush rewrite rules kerran version päivityksen jälkeen
+        $this->maybe_flush_rewrite_rules();
     }
 
     /**
-     * Varmista että oikeudet on asetettu
-     * Käytetään nyt WordPressin standardeja oikeuksia (edit_posts, manage_options)
-     * joten tätä ei enää tarvita, mutta pidetään tyhjänä yhteensopivuuden vuoksi
+     * Flush rewrite rules tarvittaessa (version päivityksen jälkeen)
      */
-    private function ensure_capabilities() {
-        // Käytetään nyt WordPressin standardeja capability_type => 'post'
-        // Administrator ja Editor voivat muokata, koska heillä on edit_posts
-        // Asetukset vaativat manage_options (vain Administrator)
+    private function maybe_flush_rewrite_rules() {
+        $flushed_version = get_option('sivustamo_rewrite_flushed', '0');
+
+        if (version_compare($flushed_version, SIVUSTAMO_VERSION, '<')) {
+            flush_rewrite_rules();
+            update_option('sivustamo_rewrite_flushed', SIVUSTAMO_VERSION);
+        }
     }
 
     /**

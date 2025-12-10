@@ -18,13 +18,10 @@ class Access_Control {
             return false;
         }
 
-        // Admineilla aina pääsy
-        if (current_user_can('administrator')) {
-            return true;
-        }
-
-        // Tarkista onko käyttäjällä oikeus nähdä ohjeita
-        return current_user_can('view_sivustamo_ohjeet');
+        // Käyttäjät joilla on read-oikeus pääsevät katsomaan ohjeita
+        // Oletuksena: administrator, editor, author, contributor, subscriber
+        // Tarkempi suodatus tapahtuu ohje/kategoria-kohtaisesti
+        return current_user_can('read');
     }
 
     /**
