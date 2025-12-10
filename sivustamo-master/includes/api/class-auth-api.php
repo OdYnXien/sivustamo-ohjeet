@@ -72,7 +72,8 @@ class Auth_API {
             $ohje_count = count($ohjeet);
         } else {
             // Kaikki ohjeet sallittu
-            $ohje_count = wp_count_posts('sivustamo_ohje')->publish;
+            $counts = wp_count_posts('sivustamo_ohje');
+            $ohje_count = isset($counts->publish) ? (int) $counts->publish : 0;
         }
 
         return rest_ensure_response([

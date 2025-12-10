@@ -278,7 +278,8 @@ class Settings_Page {
             wp_send_json_error(['message' => __('Ei oikeuksia', 'sivustamo')]);
         }
 
-        $result = Sync_Manager::sync();
+        // Manuaalinen synkronointi hakee aina kaikki ohjeet (full_sync = true)
+        $result = Sync_Manager::sync(true);
 
         if (is_wp_error($result)) {
             wp_send_json_error(['message' => $result->get_error_message()]);

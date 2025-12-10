@@ -9,16 +9,18 @@ class Sync_Manager {
 
     /**
      * Suorita synkronointi
+     *
+     * @param bool $full_sync Jos true, hakee kaikki ohjeet (ei vain muuttuneet)
      */
-    public static function sync() {
+    public static function sync($full_sync = false) {
         $api = new API_Client();
 
         if (!$api->is_configured()) {
             return new \WP_Error('not_configured', __('Sivustamo ei ole konfiguroitu', 'sivustamo'));
         }
 
-        // Hae viimeisin synkronointi
-        $last_sync = get_option('sivustamo_last_sync', 0);
+        // Hae viimeisin synkronointi (0 = hae kaikki)
+        $last_sync = $full_sync ? 0 : get_option('sivustamo_last_sync', 0);
 
         // Hae ohjeet masterilta
         $response = $api->get_ohjeet($last_sync);
