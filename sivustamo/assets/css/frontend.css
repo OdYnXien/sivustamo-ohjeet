@@ -1,0 +1,455 @@
+/**
+ * Sivustamo Frontend Styles
+ */
+
+/* Container */
+.sivustamo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Header */
+.sivustamo-header {
+    margin-bottom: 40px;
+}
+
+.sivustamo-header h1 {
+    margin: 0 0 15px;
+    font-size: 2.5em;
+    color: #1a1a1a;
+}
+
+/* Breadcrumb */
+.sivustamo-breadcrumb {
+    font-size: 14px;
+    color: #666;
+}
+
+.sivustamo-breadcrumb a {
+    color: #2271b1;
+    text-decoration: none;
+}
+
+.sivustamo-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.sivustamo-breadcrumb-separator {
+    margin: 0 10px;
+    color: #999;
+}
+
+/* Kategoriat Grid */
+.sivustamo-kategoriat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* Kategoria Card */
+.sivustamo-kategoria-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.sivustamo-kategoria-card:hover {
+    border-color: #2271b1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.sivustamo-kategoria-icon {
+    width: 48px;
+    height: 48px;
+    background: #f0f6fc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.sivustamo-kategoria-icon .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: #2271b1;
+}
+
+.sivustamo-kategoria-card h2 {
+    margin: 0 0 8px;
+    font-size: 1.25em;
+    color: #1a1a1a;
+}
+
+.sivustamo-kategoria-card p {
+    margin: 0 0 12px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.sivustamo-ohje-count {
+    font-size: 13px;
+    color: #999;
+}
+
+/* Ohjeet Grid */
+.sivustamo-ohjeet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* Ohje Card */
+.sivustamo-ohje-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.sivustamo-ohje-card:hover {
+    border-color: #2271b1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.sivustamo-ohje-icon {
+    width: 40px;
+    height: 40px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.sivustamo-ohje-icon .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #2271b1;
+}
+
+.sivustamo-ohje-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.1em;
+    color: #1a1a1a;
+}
+
+.sivustamo-ohje-card p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Single Ohje */
+.sivustamo-ohje {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 40px;
+}
+
+.sivustamo-ohje-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.sivustamo-ohje-icon-large {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: #2271b1;
+}
+
+.sivustamo-ohje-header h1 {
+    margin: 0;
+    font-size: 1.75em;
+}
+
+.sivustamo-ohje-content {
+    line-height: 1.7;
+    color: #333;
+}
+
+.sivustamo-ohje-content h2 {
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+}
+
+.sivustamo-ohje-content h3 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.sivustamo-ohje-content p {
+    margin-bottom: 1em;
+}
+
+.sivustamo-ohje-content ul,
+.sivustamo-ohje-content ol {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+}
+
+.sivustamo-ohje-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1em 0;
+}
+
+.sivustamo-ohje-content pre {
+    background: #f5f5f5;
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.sivustamo-ohje-content code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+/* Feedback */
+.sivustamo-feedback {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid #eee;
+}
+
+.sivustamo-feedback h4 {
+    margin: 0 0 16px;
+    font-size: 1.1em;
+}
+
+.sivustamo-feedback-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.sivustamo-feedback-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.sivustamo-feedback-btn:hover {
+    border-color: #2271b1;
+}
+
+.sivustamo-feedback-btn.active {
+    background: #f0f6fc;
+    border-color: #2271b1;
+}
+
+.sivustamo-feedback-btn span {
+    font-size: 18px;
+}
+
+.sivustamo-feedback-extended {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 16px;
+}
+
+.sivustamo-feedback-stars {
+    margin-bottom: 16px;
+}
+
+.sivustamo-feedback-stars label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.sivustamo-stars {
+    display: flex;
+    gap: 4px;
+}
+
+.sivustamo-star {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #ddd;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.sivustamo-star:hover,
+.sivustamo-star.active {
+    color: #f5a623;
+}
+
+.sivustamo-feedback-comment {
+    margin-bottom: 16px;
+}
+
+.sivustamo-feedback-comment label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.sivustamo-feedback-comment textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.sivustamo-feedback-submit {
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.sivustamo-feedback-submit:hover {
+    background: #135e96;
+}
+
+.sivustamo-feedback-thanks {
+    background: #d4edda;
+    color: #155724;
+    padding: 16px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.sivustamo-feedback-thanks p {
+    margin: 0;
+}
+
+/* Navigation */
+.sivustamo-ohje-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+    gap: 20px;
+}
+
+.sivustamo-ohje-nav a {
+    text-decoration: none;
+    color: inherit;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    flex: 1;
+    max-width: 45%;
+    transition: all 0.2s;
+}
+
+.sivustamo-ohje-nav a:hover {
+    border-color: #2271b1;
+    background: #f9f9f9;
+}
+
+.sivustamo-nav-prev {
+    text-align: left;
+}
+
+.sivustamo-nav-next {
+    text-align: right;
+    margin-left: auto;
+}
+
+.sivustamo-nav-label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.sivustamo-nav-title {
+    font-weight: 500;
+    color: #2271b1;
+}
+
+/* Access Denied */
+.sivustamo-access-denied {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.sivustamo-access-denied h1 {
+    margin-bottom: 16px;
+}
+
+/* No Content */
+.sivustamo-no-content {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sivustamo-container {
+        padding: 20px 15px;
+    }
+
+    .sivustamo-header h1 {
+        font-size: 1.75em;
+    }
+
+    .sivustamo-kategoriat-grid,
+    .sivustamo-ohjeet-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sivustamo-ohje {
+        padding: 20px;
+    }
+
+    .sivustamo-ohje-nav {
+        flex-direction: column;
+    }
+
+    .sivustamo-ohje-nav a {
+        max-width: 100%;
+    }
+
+    .sivustamo-nav-next {
+        text-align: left;
+    }
+}

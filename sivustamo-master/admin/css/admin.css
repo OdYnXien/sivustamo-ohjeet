@@ -1,0 +1,169 @@
+/**
+ * Sivustamo Master Admin Styles
+ */
+
+/* Dashboard Grid */
+.sivustamo-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Cards */
+.sivustamo-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.sivustamo-card h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+}
+
+.sivustamo-card.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Stats Grid */
+.sivustamo-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.sivustamo-stat {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.sivustamo-stat-number {
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+    color: #2271b1;
+}
+
+.sivustamo-stat-label {
+    color: #666;
+    font-size: 13px;
+}
+
+/* API Keys */
+.sivustamo-api-key {
+    font-family: monospace;
+    font-size: 14px;
+    padding: 5px 10px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* Copy Button */
+.sivustamo-copy-btn {
+    margin-left: 5px !important;
+}
+
+.sivustamo-copy-btn.copied {
+    background: #00a32a !important;
+    border-color: #00a32a !important;
+    color: #fff !important;
+}
+
+/* Metabox Styles */
+.sivustamo-metabox-section {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.sivustamo-metabox-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Status Indicators */
+.sivustamo-status-active {
+    color: #00a32a;
+    font-weight: bold;
+}
+
+.sivustamo-status-inactive {
+    color: #999;
+}
+
+/* Feedback Summary */
+.sivustamo-feedback-summary {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.sivustamo-feedback-stat {
+    text-align: center;
+}
+
+.sivustamo-feedback-stat .number {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.sivustamo-feedback-stat.positive .number {
+    color: #00a32a;
+}
+
+.sivustamo-feedback-stat.negative .number {
+    color: #d63638;
+}
+
+.sivustamo-feedback-stat .label {
+    color: #666;
+    font-size: 13px;
+}
+
+/* Period Filter */
+.sivustamo-period-filter {
+    margin: 20px 0;
+    padding: 10px 15px;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.sivustamo-period-filter label {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+/* Chart Container */
+.sivustamo-chart-container {
+    height: 300px;
+    position: relative;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .sivustamo-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sivustamo-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sivustamo-feedback-summary {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

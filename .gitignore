@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# WordPress
+*.log
+debug.log
+
+# Node
+node_modules/
+
+# Composer
+vendor/
+
+# Environment
+.env
+.env.local

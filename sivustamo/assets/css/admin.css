@@ -1,0 +1,78 @@
+/**
+ * Sivustamo Admin Styles
+ */
+
+/* Sync Status */
+.sivustamo-sync-info .notice {
+    margin: 10px 0;
+}
+
+.sivustamo-status-synced {
+    color: #00a32a;
+}
+
+.sivustamo-status-modified {
+    color: #dba617;
+}
+
+.sivustamo-status-local {
+    color: #2271b1;
+}
+
+/* Dashboard Widget */
+.sivustamo-dashboard-widget .sivustamo-ohjeet-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sivustamo-dashboard-widget .sivustamo-ohjeet-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.sivustamo-dashboard-widget .sivustamo-ohjeet-list li:last-child {
+    border-bottom: none;
+}
+
+.sivustamo-dashboard-widget .sivustamo-ohjeet-list a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sivustamo-dashboard-widget .sivustamo-ohjeet-list .dashicons {
+    color: #2271b1;
+}
+
+.sivustamo-widget-footer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.sivustamo-widget-stats {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.sivustamo-widget-stats span {
+    margin-right: 15px;
+}
+
+.sivustamo-widget-sync {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.sivustamo-widget-link {
+    margin: 0;
+}
+
+/* Spinner fix */
+.spinner.is-active {
+    visibility: visible;
+}
