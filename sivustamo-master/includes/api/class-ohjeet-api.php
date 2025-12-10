@@ -77,7 +77,7 @@ class Ohjeet_API {
         $ohjeet = [];
 
         foreach ($posts as $post) {
-            $ohjeet[] = self::format_ohje($post, false);
+            $ohjeet[] = self::format_ohje($post, true);  // true = sisällytä content
         }
 
         // Hae kategoriat
