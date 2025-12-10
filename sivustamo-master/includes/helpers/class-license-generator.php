@@ -84,15 +84,26 @@ class License_Generator {
     }
 
     /**
-     * Validoi pyyntö (API-avain + signature)
+     * Hae sivuston domain
+     *
+     * @param int $site_id
+     * @return string|null
+     */
+    public static function get_site_domain($site_id) {
+        return get_post_meta($site_id, '_sivusto_domain', true) ?: null;
+    }
+
+    /**
+     * Validoi pyyntö (API-avain + signature + domain)
      *
      * @param string $api_key
      * @param string $signature
      * @param string $body
      * @param string $timestamp
+     * @param string $request_domain Pyynnön lähettäjän domain (optional)
      * @return array ['valid' => bool, 'site_id' => int|null, 'error' => string|null]
      */
-    public static function validate_request($api_key, $signature, $body, $timestamp) {
+    public static function validate_request($api_key, $signature, $body, $timestamp, $request_domain = null) {
         // Tarkista API-avaimen muoto
         if (!self::validate_api_key_format($api_key)) {
             return [
@@ -119,6 +130,24 @@ class License_Generator {
                 'site_id' => $site_id,
                 'error' => 'Site is not active'
             ];
+        }
+
+        // Tarkista domain jos annettu
+        if ($request_domain) {
+            $registered_domain = self::get_site_domain($site_id);
+            if ($registered_domain) {
+                // Normalisoi domainit vertailua varten
+                $request_domain = strtolower(preg_replace('#^www\.#', '', $request_domain));
+                $registered_domain = strtolower(preg_replace('#^www\.#', '', $registered_domain));
+
+                if ($request_domain !== $registered_domain) {
+                    return [
+                        'valid' => false,
+                        'site_id' => $site_id,
+                        'error' => 'Domain mismatch'
+                    ];
+                }
+            }
         }
 
         // Tarkista timestamp (±5 minuuttia)

@@ -189,8 +189,11 @@ final class Sivustamo_Master {
     public function render_dashboard_widget() {
         global $wpdb;
 
-        $total_ohjeet = wp_count_posts('sivustamo_ohje')->publish;
-        $total_sivustot = wp_count_posts('sivustamo_sivusto')->publish;
+        $ohjeet_counts = wp_count_posts('sivustamo_ohje');
+        $total_ohjeet = isset($ohjeet_counts->publish) ? $ohjeet_counts->publish : 0;
+
+        $sivustot_counts = wp_count_posts('sivustamo_sivusto');
+        $total_sivustot = isset($sivustot_counts->publish) ? $sivustot_counts->publish : 0;
 
         $views_table = $wpdb->prefix . 'sivustamo_views';
         $total_views = $wpdb->get_var("SELECT COUNT(*) FROM $views_table");

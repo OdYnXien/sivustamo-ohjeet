@@ -121,6 +121,35 @@ class REST_Controller {
             );
         }
 
+        // Hae pyynnön domain (Origin-headerista tai Referer-headerista)
+        $request_domain = null;
+        $origin = $request->get_header('Origin');
+        $referer = $request->get_header('Referer');
+
+        if ($origin) {
+            $parsed = parse_url($origin);
+            $request_domain = isset($parsed['host']) ? $parsed['host'] : null;
+        } elseif ($referer) {
+            $parsed = parse_url($referer);
+            $request_domain = isset($parsed['host']) ? $parsed['host'] : null;
+        }
+
+        // Tarkista domain jos rekisteröity sivustolle
+        $registered_domain = License_Generator::get_site_domain($site_id);
+        if ($registered_domain && $request_domain) {
+            // Normalisoi domainit
+            $request_domain_normalized = strtolower(preg_replace('#^www\.#', '', $request_domain));
+            $registered_domain_normalized = strtolower(preg_replace('#^www\.#', '', $registered_domain));
+
+            if ($request_domain_normalized !== $registered_domain_normalized) {
+                return new \WP_Error(
+                    'domain_mismatch',
+                    __('Pyynnön domain ei täsmää rekisteröityyn domainiin', 'sivustamo-master'),
+                    ['status' => 403]
+                );
+            }
+        }
+
         // Jos allekirjoitus vaaditaan
         if (get_option('sivustamo_master_require_signature', '1') === '1') {
             if (!$signature || !$timestamp) {
@@ -132,7 +161,7 @@ class REST_Controller {
             }
 
             $body = $request->get_body();
-            $validation = License_Generator::validate_request($api_key, $signature, $body, $timestamp);
+            $validation = License_Generator::validate_request($api_key, $signature, $body, $timestamp, $request_domain);
 
             if (!$validation['valid']) {
                 return new \WP_Error(

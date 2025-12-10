@@ -66,10 +66,15 @@ class Admin_Menu {
     public static function render_dashboard() {
         global $wpdb;
 
-        // Statistiikat
-        $total_ohjeet = wp_count_posts('sivustamo_ohje')->publish;
-        $total_sivustot = wp_count_posts('sivustamo_sivusto')->publish;
-        $total_kategoriat = wp_count_terms(['taxonomy' => 'sivustamo_kategoria', 'hide_empty' => false]);
+        // Statistiikat - käytetään turvallisia tapoja
+        $ohjeet_counts = wp_count_posts('sivustamo_ohje');
+        $total_ohjeet = isset($ohjeet_counts->publish) ? $ohjeet_counts->publish : 0;
+
+        $sivustot_counts = wp_count_posts('sivustamo_sivusto');
+        $total_sivustot = isset($sivustot_counts->publish) ? $sivustot_counts->publish : 0;
+
+        $kategoriat_count = wp_count_terms(['taxonomy' => 'sivustamo_kategoria', 'hide_empty' => false]);
+        $total_kategoriat = is_wp_error($kategoriat_count) ? 0 : $kategoriat_count;
 
         $views_table = $wpdb->prefix . 'sivustamo_views';
         $feedback_table = $wpdb->prefix . 'sivustamo_feedback';
