@@ -13,7 +13,8 @@ class Kategoria_Tax {
      * Rekisteröi
      */
     public static function register() {
-        add_action('init', [__CLASS__, 'register_taxonomy']);
+        // Rekisteröi taxonomy suoraan (kutsutaan jo init-hookista)
+        self::register_taxonomy();
     }
 
     /**

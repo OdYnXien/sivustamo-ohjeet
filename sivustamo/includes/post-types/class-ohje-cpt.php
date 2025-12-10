@@ -13,7 +13,10 @@ class Ohje_CPT {
      * Rekisteröi
      */
     public static function register() {
-        add_action('init', [__CLASS__, 'register_post_type']);
+        // Rekisteröi post type suoraan (kutsutaan jo init-hookista)
+        self::register_post_type();
+
+        // Lisää muut hookit
         add_action('add_meta_boxes', [__CLASS__, 'add_meta_boxes']);
         add_action('save_post_' . self::POST_TYPE, [__CLASS__, 'save_meta'], 10, 2);
         add_filter('manage_' . self::POST_TYPE . '_posts_columns', [__CLASS__, 'custom_columns']);

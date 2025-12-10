@@ -155,6 +155,9 @@ final class Sivustamo {
      * Alustus
      */
     public function init() {
+        // Varmista oikeudet (tarvitaan jos lisäosa oli jo aktiivinen ennen päivitystä)
+        $this->ensure_capabilities();
+
         // Rekisteröi post typet ja taxonomiat
         Post_Types\Ohje_CPT::register();
         Taxonomies\Kategoria_Tax::register();
@@ -166,6 +169,29 @@ final class Sivustamo {
 
         // Rewrite rules
         $this->add_rewrite_rules();
+    }
+
+    /**
+     * Varmista että oikeudet on asetettu
+     */
+    private function ensure_capabilities() {
+        $admin = get_role('administrator');
+        if ($admin && !$admin->has_cap('manage_sivustamo_settings')) {
+            $admin->add_cap('view_sivustamo_ohjeet');
+            $admin->add_cap('edit_sivustamo_ohjeet');
+            $admin->add_cap('manage_sivustamo_settings');
+
+            $editor = get_role('editor');
+            if ($editor) {
+                $editor->add_cap('view_sivustamo_ohjeet');
+                $editor->add_cap('edit_sivustamo_ohjeet');
+            }
+
+            $shop_manager = get_role('shop_manager');
+            if ($shop_manager) {
+                $shop_manager->add_cap('view_sivustamo_ohjeet');
+            }
+        }
     }
 
     /**
