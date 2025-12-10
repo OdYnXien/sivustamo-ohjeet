@@ -44,12 +44,12 @@ class Ohje_CPT {
         $args = [
             'labels'              => $labels,
             'public'              => false,
-            'publicly_queryable'  => false,
+            'publicly_queryable'  => true,  // Tarvitaan frontendin hakuihin
             'show_ui'             => true,
             'show_in_menu'        => true,
             'menu_icon'           => 'dashicons-book-alt',
             'query_var'           => false,
-            'rewrite'             => false,
+            'rewrite'             => false,  // Ei omia rewrite-sääntöjä, käytetään custom routing
             'capability_type'     => 'post',
             'map_meta_cap'        => true,
             'has_archive'         => false,

@@ -38,6 +38,7 @@ class Kategoria_Tax {
         $args = [
             'labels'            => $labels,
             'public'            => false,
+            'publicly_queryable' => true,  // Tarvitaan frontendin hakuihin
             'show_ui'           => true,
             'show_admin_column' => true,
             'show_in_nav_menus' => false,
