@@ -94,6 +94,58 @@ class License_Generator {
     }
 
     /**
+     * Hae sivuston dev-domain
+     *
+     * @param int $site_id
+     * @return string|null
+     */
+    public static function get_site_dev_domain($site_id) {
+        return get_post_meta($site_id, '_sivusto_dev_domain', true) ?: null;
+    }
+
+    /**
+     * Tarkista täsmääkö domain sivuston rekisteröityihin domaineihin
+     *
+     * @param string $request_domain
+     * @param int $site_id
+     * @return bool
+     */
+    public static function domain_matches($request_domain, $site_id) {
+        if (empty($request_domain)) {
+            return true; // Jos ei domainia pyynnössä, ohitetaan tarkistus
+        }
+
+        $registered_domain = self::get_site_domain($site_id);
+        $dev_domain = self::get_site_dev_domain($site_id);
+
+        // Jos ei rekisteröityjä domaineja, hyväksy kaikki
+        if (empty($registered_domain) && empty($dev_domain)) {
+            return true;
+        }
+
+        // Normalisoi pyynnön domain
+        $request_domain = strtolower(preg_replace('#^www\.#', '', $request_domain));
+
+        // Tarkista tuotanto-domain
+        if ($registered_domain) {
+            $registered_normalized = strtolower(preg_replace('#^www\.#', '', $registered_domain));
+            if ($request_domain === $registered_normalized) {
+                return true;
+            }
+        }
+
+        // Tarkista dev-domain
+        if ($dev_domain) {
+            $dev_normalized = strtolower(preg_replace('#^www\.#', '', $dev_domain));
+            if ($request_domain === $dev_normalized) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Validoi pyyntö (API-avain + signature + domain)
      *
      * @param string $api_key

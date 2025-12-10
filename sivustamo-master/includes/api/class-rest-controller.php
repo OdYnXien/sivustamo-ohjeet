@@ -134,20 +134,13 @@ class REST_Controller {
             $request_domain = isset($parsed['host']) ? $parsed['host'] : null;
         }
 
-        // Tarkista domain jos rekisteröity sivustolle
-        $registered_domain = License_Generator::get_site_domain($site_id);
-        if ($registered_domain && $request_domain) {
-            // Normalisoi domainit
-            $request_domain_normalized = strtolower(preg_replace('#^www\.#', '', $request_domain));
-            $registered_domain_normalized = strtolower(preg_replace('#^www\.#', '', $registered_domain));
-
-            if ($request_domain_normalized !== $registered_domain_normalized) {
-                return new \WP_Error(
-                    'domain_mismatch',
-                    __('Pyynnön domain ei täsmää rekisteröityyn domainiin', 'sivustamo-master'),
-                    ['status' => 403]
-                );
-            }
+        // Tarkista domain (tuotanto tai dev)
+        if (!License_Generator::domain_matches($request_domain, $site_id)) {
+            return new \WP_Error(
+                'domain_mismatch',
+                __('Pyynnön domain ei täsmää rekisteröityyn domainiin', 'sivustamo-master'),
+                ['status' => 403]
+            );
         }
 
         // Jos allekirjoitus vaaditaan

@@ -77,7 +77,8 @@ class Settings_Page {
                         </th>
                         <td>
                             <input type="url" name="sivustamo_master_url" id="sivustamo_master_url"
-                                   value="<?php echo esc_attr($master_url); ?>" class="regular-text">
+                                   value="<?php echo esc_attr($master_url); ?>" class="regular-text"
+                                   autocomplete="off">
                             <p class="description"><?php _e('Ohjeiden hallintasivuston osoite', 'sivustamo'); ?></p>
                         </td>
                     </tr>
@@ -87,7 +88,9 @@ class Settings_Page {
                         </th>
                         <td>
                             <input type="text" name="sivustamo_api_key" id="sivustamo_api_key"
-                                   value="<?php echo esc_attr($api_key); ?>" class="regular-text">
+                                   value="<?php echo esc_attr($api_key); ?>" class="regular-text"
+                                   autocomplete="new-password" data-lpignore="true" data-1p-ignore="true">
+                            <p class="description"><?php _e('Kopioi masterilta: Sivustamo → Sivustot → [sivusto] → API-avaimet', 'sivustamo'); ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -95,8 +98,11 @@ class Settings_Page {
                             <label for="sivustamo_secret"><?php _e('Salaisuus (Secret)', 'sivustamo'); ?></label>
                         </th>
                         <td>
-                            <input type="password" name="sivustamo_secret" id="sivustamo_secret"
-                                   value="<?php echo esc_attr($secret); ?>" class="regular-text">
+                            <input type="text" name="sivustamo_secret" id="sivustamo_secret"
+                                   value="<?php echo esc_attr($secret); ?>" class="regular-text code"
+                                   autocomplete="new-password" data-lpignore="true" data-1p-ignore="true"
+                                   style="font-family: monospace;">
+                            <p class="description"><?php _e('Kopioi masterilta: Sivustamo → Sivustot → [sivusto] → API-avaimet', 'sivustamo'); ?></p>
                         </td>
                     </tr>
                     <tr>

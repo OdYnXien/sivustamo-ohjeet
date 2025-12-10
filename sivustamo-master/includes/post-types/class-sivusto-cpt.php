@@ -115,6 +115,7 @@ class Sivusto_CPT {
         wp_nonce_field('sivustamo_sivusto_settings', 'sivustamo_sivusto_nonce');
 
         $domain = get_post_meta($post->ID, '_sivusto_domain', true);
+        $dev_domain = get_post_meta($post->ID, '_sivusto_dev_domain', true);
         $active = get_post_meta($post->ID, '_sivusto_active', true);
         $created = get_post_meta($post->ID, '_sivusto_created', true);
         $last_sync = get_post_meta($post->ID, '_sivusto_last_sync', true);
@@ -127,7 +128,16 @@ class Sivusto_CPT {
                     <input type="text" id="sivusto_domain" name="sivusto_domain"
                            value="<?php echo esc_attr($domain); ?>"
                            class="regular-text" placeholder="esimerkki.fi">
-                    <p class="description"><?php _e('Sivuston domain ilman protokollaa (esim. asiakas.fi)', 'sivustamo-master'); ?></p>
+                    <p class="description"><?php _e('Sivuston tuotanto-domain ilman protokollaa (esim. asiakas.fi)', 'sivustamo-master'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="sivusto_dev_domain"><?php _e('Dev-domain', 'sivustamo-master'); ?></label></th>
+                <td>
+                    <input type="text" id="sivusto_dev_domain" name="sivusto_dev_domain"
+                           value="<?php echo esc_attr($dev_domain); ?>"
+                           class="regular-text" placeholder="asiakas.dev.sivustamo.fi">
+                    <p class="description"><?php _e('Valinnainen kehitysympäristön domain (esim. asiakas.dev.sivustamo.fi)', 'sivustamo-master'); ?></p>
                 </td>
             </tr>
             <tr>
@@ -350,6 +360,14 @@ class Sivusto_CPT {
             $domain = preg_replace('#^https?://#', '', $domain); // Poista protokolla
             $domain = rtrim($domain, '/'); // Poista lopun /
             update_post_meta($post_id, '_sivusto_domain', $domain);
+        }
+
+        // Dev-domain
+        if (isset($_POST['sivusto_dev_domain'])) {
+            $dev_domain = sanitize_text_field($_POST['sivusto_dev_domain']);
+            $dev_domain = preg_replace('#^https?://#', '', $dev_domain);
+            $dev_domain = rtrim($dev_domain, '/');
+            update_post_meta($post_id, '_sivusto_dev_domain', $dev_domain);
         }
 
         // Aktiivinen

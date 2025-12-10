@@ -3,7 +3,7 @@
  * Plugin Name: Sivustamo
  * Plugin URI: https://sivustamo.fi
  * Description: Sivustamon ohjeet ja oppaat - synkronoidut ohjeet keskitetystä hallinnasta
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Esko Junnila / Sivustamo Oy
  * Author URI: https://sivustamo.fi
  * License: GPL-2.0+
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin-vakiot
-define('SIVUSTAMO_VERSION', '1.0.4');
+define('SIVUSTAMO_VERSION', '1.0.5');
 define('SIVUSTAMO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SIVUSTAMO_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SIVUSTAMO_PLUGIN_BASENAME', plugin_basename(__FILE__));
