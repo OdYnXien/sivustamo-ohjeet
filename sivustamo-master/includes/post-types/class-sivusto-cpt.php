@@ -151,6 +151,38 @@ class Sivusto_CPT {
                     <p class="description"><?php _e('Vain aktiiviset sivustot voivat synkronoida ohjeita', 'sivustamo-master'); ?></p>
                 </td>
             </tr>
+            <tr>
+                <th><?php _e('Käyttöoikeusryhmät', 'sivustamo-master'); ?></th>
+                <td>
+                    <?php
+                    $sivusto_ryhmat = get_post_meta($post->ID, '_sivusto_ryhmat', true) ?: [];
+                    $all_ryhmat = Ryhma_CPT::get_all_groups();
+
+                    if (empty($all_ryhmat)) {
+                        echo '<p class="description">' . __('Ei ryhmiä luotu. ', 'sivustamo-master');
+                        echo '<a href="' . admin_url('post-new.php?post_type=sivustamo_ryhma') . '">' . __('Luo ensimmäinen ryhmä', 'sivustamo-master') . '</a></p>';
+                    } else {
+                        foreach ($all_ryhmat as $ryhma) {
+                            $is_default = get_post_meta($ryhma->ID, '_ryhma_is_default', true) === '1';
+                            $checked = in_array($ryhma->ID, $sivusto_ryhmat) || ($is_default && empty($sivusto_ryhmat));
+                            $label = $ryhma->post_title;
+                            if ($is_default) {
+                                $label .= ' <small>(' . __('oletus', 'sivustamo-master') . ')</small>';
+                            }
+                            ?>
+                            <label style="display: block; margin-bottom: 5px;">
+                                <input type="checkbox" name="sivusto_ryhmat[]"
+                                       value="<?php echo esc_attr($ryhma->ID); ?>"
+                                       <?php checked($checked); ?>>
+                                <?php echo $label; ?>
+                            </label>
+                            <?php
+                        }
+                    }
+                    ?>
+                    <p class="description"><?php _e('Valitse mihin ryhmiin tämä sivusto kuuluu. Ryhmät määrittävät mitä ohjeita ja kategorioita sivusto saa.', 'sivustamo-master'); ?></p>
+                </td>
+            </tr>
             <?php if ($created) : ?>
             <tr>
                 <th><?php _e('Luotu', 'sivustamo-master'); ?></th>
@@ -373,6 +405,20 @@ class Sivusto_CPT {
         // Aktiivinen
         $active = isset($_POST['sivusto_active']) ? '1' : '0';
         update_post_meta($post_id, '_sivusto_active', $active);
+
+        // Käyttöoikeusryhmät
+        if (isset($_POST['sivusto_ryhmat']) && is_array($_POST['sivusto_ryhmat'])) {
+            $ryhmat = array_map('intval', $_POST['sivusto_ryhmat']);
+            update_post_meta($post_id, '_sivusto_ryhmat', $ryhmat);
+        } else {
+            // Jos ei valittu mitään, lisää oletusryhmään
+            $default_group = Ryhma_CPT::get_default_group();
+            if ($default_group) {
+                update_post_meta($post_id, '_sivusto_ryhmat', [$default_group->ID]);
+            } else {
+                update_post_meta($post_id, '_sivusto_ryhmat', []);
+            }
+        }
 
         // Kategoriat
         if (isset($_POST['sivusto_kategoriat']) && is_array($_POST['sivusto_kategoriat'])) {

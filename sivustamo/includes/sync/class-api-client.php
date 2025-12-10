@@ -5,6 +5,8 @@
 
 namespace Sivustamo\Client\Sync;
 
+use Sivustamo\Client\Admin\Settings_Page;
+
 class API_Client {
 
     /**
@@ -26,9 +28,11 @@ class API_Client {
      * Konstruktori
      */
     public function __construct() {
-        $this->api_url = trailingslashit(get_option('sivustamo_master_url', 'https://sivustamo.dev')) . 'wp-json/sivustamo/v1/';
-        $this->api_key = get_option('sivustamo_api_key', '');
-        $this->secret = get_option('sivustamo_secret', '');
+        // Käytä Settings_Page::get_setting() joka tarkistaa ympäristömuuttujat ensin
+        $master_url = Settings_Page::get_setting('master_url', 'https://sivustamo.dev');
+        $this->api_url = trailingslashit($master_url) . 'wp-json/sivustamo/v1/';
+        $this->api_key = Settings_Page::get_setting('api_key', '');
+        $this->secret = Settings_Page::get_setting('secret', '');
     }
 
     /**

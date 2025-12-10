@@ -79,8 +79,17 @@ class Ohje_CPT {
         );
 
         add_meta_box(
+            'sivustamo_ohje_ryhmat',
+            __('Näkyvyys (ryhmät)', 'sivustamo-master'),
+            [__CLASS__, 'render_ryhmat_metabox'],
+            self::POST_TYPE,
+            'side',
+            'high'
+        );
+
+        add_meta_box(
             'sivustamo_ohje_roles',
-            __('Käyttöoikeudet', 'sivustamo-master'),
+            __('Käyttäjäroolit', 'sivustamo-master'),
             [__CLASS__, 'render_roles_metabox'],
             self::POST_TYPE,
             'side',
@@ -131,7 +140,51 @@ class Ohje_CPT {
     }
 
     /**
-     * Renderöi käyttöoikeudet-metabox
+     * Renderöi ryhmät-metabox
+     */
+    public static function render_ryhmat_metabox($post) {
+        $saved_ryhmat = get_post_meta($post->ID, '_ohje_ryhmat', true);
+        if (!is_array($saved_ryhmat)) {
+            $saved_ryhmat = [];
+        }
+
+        $all_ryhmat = Ryhma_CPT::get_all_groups();
+
+        if (empty($all_ryhmat)) {
+            echo '<p>' . __('Ei ryhmiä luotu. ', 'sivustamo-master');
+            echo '<a href="' . admin_url('post-new.php?post_type=sivustamo_ryhma') . '">' . __('Luo ensimmäinen ryhmä', 'sivustamo-master') . '</a></p>';
+            return;
+        }
+
+        ?>
+        <p><?php _e('Valitse ryhmät joille tämä ohje näytetään:', 'sivustamo-master'); ?></p>
+        <?php
+        foreach ($all_ryhmat as $ryhma) {
+            $is_default = get_post_meta($ryhma->ID, '_ryhma_is_default', true) === '1';
+            // Tyhjä = näytetään kaikille (oletusryhmä riittää)
+            $checked = empty($saved_ryhmat) || in_array($ryhma->ID, $saved_ryhmat);
+            $label = $ryhma->post_title;
+            if ($is_default) {
+                $label .= ' <small>(' . __('oletus', 'sivustamo-master') . ')</small>';
+            }
+            ?>
+            <label style="display: block; margin-bottom: 5px;">
+                <input type="checkbox" name="ohje_ryhmat[]"
+                       value="<?php echo esc_attr($ryhma->ID); ?>"
+                       <?php checked($checked); ?>>
+                <?php echo $label; ?>
+            </label>
+            <?php
+        }
+        ?>
+        <p class="description" style="margin-top: 10px;">
+            <?php _e('Jos kaikki on valittu, ohje näkyy kaikille sivustoille. Valitse vain tietyt ryhmät rajoittaaksesi näkyvyyttä.', 'sivustamo-master'); ?>
+        </p>
+        <?php
+    }
+
+    /**
+     * Renderöi käyttäjäroolit-metabox
      */
     public static function render_roles_metabox($post) {
         $saved_roles = get_post_meta($post->ID, '_ohje_roles', true);
@@ -142,7 +195,7 @@ class Ohje_CPT {
         $all_roles = wp_roles()->get_names();
 
         ?>
-        <p><?php _e('Valitse käyttäjäryhmät jotka voivat nähdä tämän ohjeen:', 'sivustamo-master'); ?></p>
+        <p><?php _e('Client-sivuston käyttäjäroolit jotka näkevät ohjeen:', 'sivustamo-master'); ?></p>
         <?php foreach ($all_roles as $role_slug => $role_name) : ?>
             <label style="display: block; margin-bottom: 5px;">
                 <input type="checkbox" name="ohje_roles[]"
@@ -238,6 +291,15 @@ class Ohje_CPT {
             update_post_meta($post_id, '_ohje_roles', $roles);
         } else {
             update_post_meta($post_id, '_ohje_roles', []);
+        }
+
+        // Tallenna ryhmät
+        if (isset($_POST['ohje_ryhmat']) && is_array($_POST['ohje_ryhmat'])) {
+            $ryhmat = array_map('intval', $_POST['ohje_ryhmat']);
+            update_post_meta($post_id, '_ohje_ryhmat', $ryhmat);
+        } else {
+            // Tyhjä = kaikille
+            update_post_meta($post_id, '_ohje_ryhmat', []);
         }
 
         // Päivitä versio jos sisältö muuttui

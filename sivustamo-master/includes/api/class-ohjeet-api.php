@@ -19,7 +19,10 @@ class Ohjeet_API {
             return new \WP_Error('not_authenticated', __('Autentikointi epäonnistui', 'sivustamo-master'), ['status' => 401]);
         }
 
-        // Hae sivuston sallitut kategoriat ja ohjeet
+        // Hae sivuston ryhmät
+        $sivusto_ryhmat = get_post_meta($site_id, '_sivusto_ryhmat', true) ?: [];
+
+        // Hae sivuston sallitut kategoriat ja ohjeet (vanhat, yhä tuetut)
         $allowed_kategoriat = get_post_meta($site_id, '_sivusto_kategoriat', true) ?: [];
         $allowed_ohjeet = get_post_meta($site_id, '_sivusto_ohjeet', true) ?: [];
 
@@ -77,6 +80,10 @@ class Ohjeet_API {
         $ohjeet = [];
 
         foreach ($posts as $post) {
+            // Suodata ryhmien mukaan
+            if (!self::is_ohje_visible_to_site($post->ID, $sivusto_ryhmat)) {
+                continue;
+            }
             $ohjeet[] = self::format_ohje($post, true);  // true = sisällytä content
         }
 
@@ -245,11 +252,47 @@ class Ohjeet_API {
     }
 
     /**
+     * Tarkista näkyykö ohje sivustolle ryhmien perusteella
+     *
+     * @param int $ohje_id
+     * @param array $sivusto_ryhmat Sivuston ryhmä-IDt
+     * @return bool
+     */
+    private static function is_ohje_visible_to_site($ohje_id, $sivusto_ryhmat) {
+        $ohje_ryhmat = get_post_meta($ohje_id, '_ohje_ryhmat', true);
+
+        // Jos ohjeella ei ole ryhmiä määritelty (tyhjä), näkyy kaikille
+        if (empty($ohje_ryhmat) || !is_array($ohje_ryhmat)) {
+            return true;
+        }
+
+        // Jos sivustolla ei ole ryhmiä, tarkista näkyykö oletusryhmälle
+        if (empty($sivusto_ryhmat)) {
+            // Hae oletusryhmä
+            $default_group = \Sivustamo\Master\Post_Types\Ryhma_CPT::get_default_group();
+            if ($default_group && in_array($default_group->ID, $ohje_ryhmat)) {
+                return true;
+            }
+            return false;
+        }
+
+        // Tarkista onko yksikin ryhmä yhteinen
+        foreach ($sivusto_ryhmat as $ryhma_id) {
+            if (in_array($ryhma_id, $ohje_ryhmat)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Hae sivuston sallitut kategoriat
      */
     private static function get_allowed_kategoriat($site_id) {
         $allowed_kategoriat = get_post_meta($site_id, '_sivusto_kategoriat', true) ?: [];
         $allowed_ohjeet = get_post_meta($site_id, '_sivusto_ohjeet', true) ?: [];
+        $sivusto_ryhmat = get_post_meta($site_id, '_sivusto_ryhmat', true) ?: [];
 
         // Jos sivustolle on määritelty yksittäisiä ohjeita, hae niiden kategoriat
         if (!empty($allowed_ohjeet)) {
@@ -264,28 +307,43 @@ class Ohjeet_API {
             $allowed_kategoriat = array_unique(array_merge($allowed_kategoriat, $kategoria_ids));
         }
 
-        // Jos ei ole mitään rajoituksia, palauta tyhjä lista
-        // (ei palauteta kaikkia kategorioita oletuksena)
-        if (empty($allowed_kategoriat) && empty($allowed_ohjeet)) {
-            // Palauta kaikki vain jos mitään ei ole rajoitettu
-            $args = [
-                'taxonomy' => 'sivustamo_kategoria',
-                'hide_empty' => true,
-                'orderby' => 'meta_value_num',
-                'meta_key' => '_kategoria_order',
-                'order' => 'ASC',
-            ];
-        } else {
-            // Suodata vain sallitut kategoriat
-            $args = [
-                'taxonomy' => 'sivustamo_kategoria',
-                'hide_empty' => false,
-                'orderby' => 'meta_value_num',
-                'meta_key' => '_kategoria_order',
-                'order' => 'ASC',
-                'include' => $allowed_kategoriat,
-            ];
+        // Kerää kategoriat niistä ohjeista jotka näkyvät sivustolle ryhmien perusteella
+        $visible_kategoria_ids = [];
+        $all_ohjeet = get_posts([
+            'post_type' => 'sivustamo_ohje',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'fields' => 'ids',
+        ]);
+
+        foreach ($all_ohjeet as $ohje_id) {
+            if (self::is_ohje_visible_to_site($ohje_id, $sivusto_ryhmat)) {
+                $terms = wp_get_post_terms($ohje_id, 'sivustamo_kategoria', ['fields' => 'ids']);
+                if (!is_wp_error($terms)) {
+                    $visible_kategoria_ids = array_merge($visible_kategoria_ids, $terms);
+                }
+            }
         }
+        $visible_kategoria_ids = array_unique($visible_kategoria_ids);
+
+        // Jos on vanhan tyyliset rajoitukset, yhdistä molemmat suodatukset
+        if (!empty($allowed_kategoriat)) {
+            $visible_kategoria_ids = array_intersect($visible_kategoria_ids, $allowed_kategoriat);
+        }
+
+        // Jos ei näkyviä kategorioita, palauta tyhjä
+        if (empty($visible_kategoria_ids)) {
+            return [];
+        }
+
+        $args = [
+            'taxonomy' => 'sivustamo_kategoria',
+            'hide_empty' => false,
+            'orderby' => 'meta_value_num',
+            'meta_key' => '_kategoria_order',
+            'order' => 'ASC',
+            'include' => $visible_kategoria_ids,
+        ];
 
         $terms = get_terms($args);
         $kategoriat = [];

@@ -3,7 +3,7 @@
  * Plugin Name: Sivustamo Master
  * Plugin URI: https://sivustamo.fi
  * Description: Keskitetty ohjeiden hallintajärjestelmä - Master-lisäosa
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Esko Junnila / Sivustamo Oy
  * Author URI: https://sivustamo.fi
  * License: GPL-2.0+
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin-vakiot
-define('SIVUSTAMO_MASTER_VERSION', '1.0.0');
+define('SIVUSTAMO_MASTER_VERSION', '1.1.0');
 define('SIVUSTAMO_MASTER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SIVUSTAMO_MASTER_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SIVUSTAMO_MASTER_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -62,6 +62,7 @@ final class Sivustamo_Master {
         // Post Types
         require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/post-types/class-ohje-cpt.php';
         require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/post-types/class-sivusto-cpt.php';
+        require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/post-types/class-ryhma-cpt.php';
 
         // Taxonomies
         require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/taxonomies/class-kategoria-tax.php';
@@ -69,6 +70,11 @@ final class Sivustamo_Master {
         // Helpers
         require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/helpers/class-license-generator.php';
         require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/helpers/class-media-handler.php';
+
+        // WP-CLI komennot
+        if (defined('WP_CLI') && WP_CLI) {
+            require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/cli/class-sivustamo-cli.php';
+        }
 
         // Admin
         require_once SIVUSTAMO_MASTER_PLUGIN_DIR . 'includes/admin/class-admin-menu.php';
@@ -116,6 +122,7 @@ final class Sivustamo_Master {
         // Rekisteröi post typet ja taxonomiat
         Post_Types\Ohje_CPT::register();
         Post_Types\Sivusto_CPT::register();
+        Post_Types\Ryhma_CPT::register();
         Taxonomies\Kategoria_Tax::register();
     }
 
