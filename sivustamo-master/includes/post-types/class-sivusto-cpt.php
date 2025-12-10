@@ -136,8 +136,8 @@ class Sivusto_CPT {
                 <td>
                     <input type="text" id="sivusto_dev_domain" name="sivusto_dev_domain"
                            value="<?php echo esc_attr($dev_domain); ?>"
-                           class="regular-text" placeholder="asiakas.dev.sivustamo.fi">
-                    <p class="description"><?php _e('Valinnainen kehitysympäristön domain (esim. asiakas.dev.sivustamo.fi)', 'sivustamo-master'); ?></p>
+                           class="regular-text" placeholder="asiakas.sivustamo.dev">
+                    <p class="description"><?php _e('Valinnainen kehitysympäristön domain (esim. asiakas.sivustamo.dev)', 'sivustamo-master'); ?></p>
                 </td>
             </tr>
             <tr>
