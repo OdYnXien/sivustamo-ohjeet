@@ -16,7 +16,10 @@ class Kategoria_Tax {
      * Rekisteröi taxonomy
      */
     public static function register() {
-        add_action('init', [__CLASS__, 'register_taxonomy']);
+        // Rekisteröi taxonomy suoraan (kutsutaan jo init-hookista)
+        self::register_taxonomy();
+
+        // Lisää muut hookit
         add_action(self::TAXONOMY . '_add_form_fields', [__CLASS__, 'add_form_fields']);
         add_action(self::TAXONOMY . '_edit_form_fields', [__CLASS__, 'edit_form_fields'], 10, 2);
         add_action('created_' . self::TAXONOMY, [__CLASS__, 'save_term_meta'], 10, 2);
