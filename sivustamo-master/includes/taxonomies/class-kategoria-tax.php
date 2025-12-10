@@ -51,7 +51,7 @@ class Kategoria_Tax {
         $args = [
             'labels'            => $labels,
             'public'            => false,
-            'publicly_queryable' => false,
+            'publicly_queryable' => true,  // Tarvitaan API:n get_terms() -kutsuihin
             'show_ui'           => true,
             'show_in_menu'      => true,
             'show_in_nav_menus' => false,

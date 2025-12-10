@@ -48,7 +48,7 @@ class Ohje_CPT {
         $args = [
             'labels'              => $labels,
             'public'              => false,
-            'publicly_queryable'  => false,
+            'publicly_queryable'  => true,  // Tarvitaan API:n get_posts() -kutsuihin
             'show_ui'             => true,
             'show_in_menu'        => 'sivustamo-master',
             'query_var'           => false,
